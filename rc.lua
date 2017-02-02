@@ -321,12 +321,13 @@ globalkeys = awful.util.table.join(
 		awful.key({modkey, "Shift"		}, "Return", function() awful.util.spawn("sh touchkill") end ),
 
     -- Prompt
-    awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+    -- awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+	awful.key({ modkey },            "r",     function () mypromptbox[mymap()]:run() end),
 
     awful.key({ modkey }, "x",
               function ()
                   awful.prompt.run({ prompt = "Run Lua code: " },
-                  mypromptbox[mouse.screen].widget,
+                  mypromptbox[mymap].widget,
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end),
@@ -510,5 +511,14 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
 awful.util.spawn("/usr/bin/screens")
-
+function mymap()
+	-- defines mapping between screen.screen() and screen.count()
+	t = 1
+	for x in screen do
+		if x == mouse.screen
+			return t
+		end
+		t = t+1
+	end
+end
 -- }}}
